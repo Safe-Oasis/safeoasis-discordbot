@@ -1,0 +1,51 @@
+{
+    "name": "safeoasis-discordbot",
+    "version": "1.0.0",
+    "description": "The Safe-Oasis Discordbot adding general functionality to the Discordserver",
+    "main": "bot.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prettier": "npx prettier --write .",
+        "lint": "./node_modules/.bin/eslint .",
+        "licenseCheck": "license-check-and-add check -f ./licenseConfig.json",
+        "license": "license-check-and-add add -f ./licenseConfig.json"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Safe-Oasis/safeoasis-discordbot.git"
+    },
+    "keywords": [
+        "discord",
+        "bot",
+        "oasis",
+        "safeoasis",
+        "safe",
+        "discordbot"
+    ],
+    "author": "LuciferMorningstarDev",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/Safe-Oasis/safeoasis-discordbot/issues"
+    },
+    "homepage": "https://github.com/Safe-Oasis/safeoasis-discordbot#readme",
+    "dependencies": {
+        "@discordjs/rest": "^1.1.0",
+        "axios": "^0.27.2",
+        "discord-api-types": "^0.37.3",
+        "discord.js": "^14.3.0",
+        "dotenv": "^16.0.1",
+        "enmap": "^5.9.0",
+        "is-valid-domain": "^0.1.6",
+        "md5": "^2.3.0",
+        "mongodb": "^4.9.0",
+        "string-similarity": "^4.0.4",
+        "time-stamp": "^2.2.0",
+        "uuid": "^8.3.2",
+        "validator": "^13.7.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.22.0",
+        "license-check-and-add": "^4.0.5",
+        "prettier": "^2.7.1"
+    }
+}
