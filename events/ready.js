@@ -11,5 +11,11 @@ module.exports = async (bot) => {
     bot.tools.discord.updateSlashCommands(bot, false);
     bot.tools.discord.startupGuildCheck(bot);
 
+    let customs = await bot.db.queryAsync('customcommand', {});
+    customs.map((cmd) => delete cmd._id);
+
+    //Log all custom commands
+    console.log(`Custom commands: %o`, customs);
+
     console.log('[BOT LOGGED IN] » no critical problems could be detected...');
 };
