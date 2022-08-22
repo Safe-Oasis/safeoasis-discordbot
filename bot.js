@@ -19,7 +19,7 @@ const { REST } = require('@discordjs/rest');
 
 const cachePath = process.cwd() + '/cache.json';
 if (!fs.existsSync(cachePath)) {
-    fs.writeFileSync(cachePath, JSON.stringify({ verifyUsers: {} }));
+    fs.writeFileSync(cachePath, JSON.stringify({}));
 }
 
 // create the Discord Client
@@ -27,6 +27,9 @@ const bot = new Client({
     intents: 3276799,
     restRequestTimeout: 10000
 });
+
+bot.cacheJSON = require(cachePath);
+bot.restartCommandUsed = bot.cacheJSON.restartCommandUsed || {};
 
 // enable module caching by adding a new global require function
 bot.modules = {};
@@ -160,3 +163,18 @@ bot.restClient = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
 // finally login bot
 bot.login(process.env.BOT_TOKEN);
+
+// CACHE Writing methods
+const saveCache = () => {
+    fs.writeFileSync(
+        cachePath,
+        JSON.stringify({
+            restartCommandUsed: bot.restartCommandUsed
+        }),
+        null,
+        2
+    );
+};
+process.on('SIGINT', saveCache);
+process.on('SIGTERM', saveCache);
+process.on('exit', saveCache);
