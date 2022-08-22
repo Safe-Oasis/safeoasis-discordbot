@@ -8,9 +8,11 @@
 
 const jsTools = require('./javascript');
 const dcTools = require('./discord');
+const twTools = require('./twitter');
 
 module.exports = {
     discord: dcTools,
     js: jsTools,
-    javascript: jsTools
+    javascript: jsTools,
+    twitter: twTools
 };

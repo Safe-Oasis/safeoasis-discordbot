@@ -11,6 +11,8 @@ module.exports = async (bot) => {
     bot.tools.discord.updateSlashCommands(bot, false);
     bot.tools.discord.startupGuildCheck(bot);
 
+    bot.tools.twitter.setup(bot);
+
     let customs = await bot.db.queryAsync('customcommand', {});
     customs.map((cmd) => delete cmd._id);
 
