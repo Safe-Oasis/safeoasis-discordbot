@@ -38,6 +38,7 @@ global.moduleRequire = (mod) => {
 
 // Declare new main Bot Variables
 bot.configs = {};
+bot.commands = new enmap();
 bot.interactions = new enmap();
 bot.slash_commands = new enmap();
 
@@ -75,6 +76,43 @@ fs.readdir('./events/', (error, files) => {
             bot.on(eventName, event.bind(null, bot));
         } catch (error) {
             console.error(error);
+        }
+    });
+});
+
+bot.aliases = [];
+bot.commandKeys = [];
+// load commands
+fs.readdir('./commands/', (error, files) => {
+    if (error) throw error;
+    files.forEach((file) => {
+        try {
+            if (!file.endsWith('.js')) return;
+            if (file.startsWith('_')) return;
+            let props = require(`./commands/${file}`);
+            if (props.active == true) {
+                let commandName = file.split('.')[0];
+                props.isCommand = true;
+                bot.commands.set(commandName, props);
+                if (props.similarityCheck == true) bot.commandKeys.push(commandName);
+                if (props.aliases != null) {
+                    for (let alias of props.aliases) {
+                        if (!bot.aliases.includes(alias)) {
+                            props.isCommand = false;
+                            if (props.similarityCheck == true) bot.commandKeys.push(alias);
+                            bot.aliases.push(alias);
+                            bot.commands.set(alias, props);
+                        } else {
+                            console.log('Could not add alias ' + alias + ' for command ' + commandName);
+                        }
+                    }
+                }
+                console.log(
+                    `[COMMAND LOADED] >> ${commandName}... ${props.aliases != null && props.aliases.length > 0 ? 'Aliases: ' + props.aliases.join(', ') : 'Aliases: none'}`
+                );
+            }
+        } catch (error) {
+            bot.error(error);
         }
     });
 });

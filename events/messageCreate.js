@@ -129,4 +129,56 @@ module.exports = async (bot, message) => {
 
         return;
     }
+
+    // grab command of the command nap
+    var cmd = bot.commands.get(command);
+
+    // check if a similar command is available
+    if (!cmd) {
+        try {
+            // cmd = bot.commands.get(bot.tools.discord.getSimilarCommand(bot, command) || '');
+            var similar = bot.tools.discord.getSimilarCommand(bot, command);
+            if (similar != null && similar != '') {
+                return message.reply({
+                    embeds: [
+                        await bot.tools.discord.generateEmbed({
+                            title: 'Command Proposal',
+                            thumbnail: message.guild.iconURL(),
+                            description: `
+Your command \`${command}\` was similar to \`${similar}\`
+Did you mean
+\`\`\`
+${prefix}${similar} ${args.join(' ')}
+\`\`\`
+                        `
+                        })
+                    ]
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // do nothing if command doesn't exist
+    if (!cmd) return;
+
+    // anti commandspam
+    var ts = Date.now();
+    if (commandLastPost[message.author.id] != null) {
+        if (ts - commandLastPost[message.author.id] < 3000) {
+            if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply(':x: Please do not spam commands! :x:');
+        }
+    }
+    commandLastPost[message.author.id] = ts;
+
+    // finally run the command
+    try {
+        var commandResult = await cmd.run(bot, message, command, args, prefix);
+        // TODO: better error handling
+        // if (commandResult) message.react('✅').catch((err) => {});
+        // else message.react(':x:').catch((err) => {});
+    } catch (error) {
+        message.react(':x:').catch((err) => {});
+    }
 };

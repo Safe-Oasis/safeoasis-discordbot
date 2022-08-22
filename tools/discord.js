@@ -15,18 +15,18 @@ const { Routes } = moduleRequire('discord-api-types/v10');
 module.exports = () => null;
 
 // set a new bot status ( let the bot pick a random string of an array )
-module.exports.setStatus = async (botInstance, activities_list) => {
+module.exports.setStatus = async (bot, activities_list) => {
     var index = Math.floor(Math.random() * activities_list.length);
     if (index < 0) index = 0;
     if (index >= activities_list.length) index = activities_list.length - 1;
     var txt = activities_list[index][0];
     var amount = 0;
     if (activities_list[index][1] != 'STREAMING') {
-        botInstance.user.setActivity(txt, {
+        bot.user.setActivity(txt, {
             type: activities_list[index][1] || 'PLAYING'
         });
     } else {
-        botInstance.user.setActivity(txt, {
+        bot.user.setActivity(txt, {
             type: 'STREAMING',
             url: activities_list[index][2] || 'https://google.com'
         });
@@ -34,15 +34,15 @@ module.exports.setStatus = async (botInstance, activities_list) => {
 };
 
 // set a new bot Status
-module.exports.setBotStatus = async (botInstance, status, type) => {
-    botInstance.user.setActivity(status || 'Leerer Status gesetzt', {
+module.exports.setBotStatus = async (bot, status, type) => {
+    bot.user.setActivity(status || 'Leerer Status gesetzt', {
         type: type || 'PLAYING'
     });
 };
 
 // updateStatus is actually called each 2 min. in ready.js
-module.exports.updateStatus = async (botInstance) => {
-    botInstance.tools.discord.setStatus(botInstance, botInstance.configs.status);
+module.exports.updateStatus = async (bot) => {
+    bot.tools.discord.setStatus(bot, bot.configs.status);
 };
 
 module.exports.generateEmbed = async (data) => {
@@ -219,4 +219,14 @@ module.exports.startupGuildCheck = async (bot) => {
             bot.tools.discord.updateSlashCommands(bot, guild);
         }
     });
+};
+
+module.exports.getSimilarCommand = (bot, input) => {
+    // console.log(input || '', bot.commandKeys || []);
+    let possibleCommands = similarity.findBestMatch(input || '', bot.commandKeys || []);
+    if (!possibleCommands.bestMatch || possibleCommands.bestMatch.rating < 0.7) {
+        return '';
+    } else {
+        return possibleCommands.bestMatch.target;
+    }
 };
