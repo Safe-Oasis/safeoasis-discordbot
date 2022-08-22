@@ -99,6 +99,8 @@ module.exports.randomMinMax = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+module.exports.hexToDecimal = (hex) => parseInt(hex, 16);
+
 module.exports.randomInterval = async (minDelay, maxDelay, intervalFunction) => {
     var getRandomNumberBetween = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);

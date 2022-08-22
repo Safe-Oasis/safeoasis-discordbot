@@ -8,6 +8,7 @@
 
 const similarity = moduleRequire('string-similarity');
 const Discord = moduleRequire('discord.js');
+const { EmbedBuilder } = Discord;
 const isDomain = moduleRequire('is-valid-domain');
 const { Routes } = moduleRequire('discord-api-types/v10');
 
@@ -45,9 +46,9 @@ module.exports.updateStatus = async (botInstance) => {
 };
 
 module.exports.generateEmbed = async (data) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
-            let embed = new Discord.MessageEmbed();
+            let embed = new EmbedBuilder();
             if (data.timestamp) embed.setTimestamp(data.timestamp);
             else if (data.timestamp != false) embed.setTimestamp();
             if (data.title) embed.setTitle(data.title);
@@ -89,10 +90,13 @@ module.exports.generateEmbed = async (data) => {
                     });
                 } else {
                     embed.setFooter({
-                        text: data.author
+                        text: data.footer
                     });
                 }
-            } else embed.setFooter(process.env.BOT_NAME);
+            } else
+                embed.setFooter({
+                    text: process.env.BOT_NAME
+                });
             if (data.fields) {
                 for (let field of data.fields) {
                     if (field.name != '' && field.value != '') {

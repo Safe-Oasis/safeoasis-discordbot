@@ -33,11 +33,15 @@ module.exports = async (bot, message) => {
     if (message.mentions.users) {
         let mentioned = message.mentions.users.first() == bot.user.id;
         if (mentioned) {
-            let embed = await bot.tools.discord.generateEmbed({
-                title: 'Slash Commands',
-                description: "If you want to use my commands please use discord's slash command feature."
+            message.reply({
+                embeds: [
+                    await bot.tools.discord.generateEmbed({
+                        title: 'Slash Commands',
+                        description: "If you want to use my commands please use discord's slash command feature.",
+                        thumbnail: message.guild.iconURL()
+                    })
+                ]
             });
-            message.reply({ embeds: [embed] });
             return;
         }
     }
@@ -67,7 +71,15 @@ module.exports = async (bot, message) => {
 
     if (customC.length > 0) {
         let reply = customC[0].reply;
-        message.channel.send(reply);
+        try {
+            let jsonData = JSON.parse(reply);
+            message.channel.send({ embeds: [await bot.tools.discord.generateEmbed(jsonData)] });
+            // TODO: better convert methods
+        } catch (error) {
+            console.log(error);
+            message.channel.send(reply);
+        }
+
         return;
     }
 };
