@@ -6,9 +6,11 @@
 
 ### clone repository and install all dependencies
 
-> git clone git@github.com:Safe-Oasis/safeoasis-discordbot.git
-> cd safeoasis-discordbot
-> npm install
+-   > git clone git@github.com:Safe-Oasis/safeoasis-discordbot.git
+
+-   > cd safeoasis-discordbot
+
+-   > npm install
 
 ---
 
