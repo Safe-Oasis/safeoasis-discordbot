@@ -7,17 +7,23 @@
 'use strict'; // https://www.w3schools.com/js/js_strict.asp
 
 module.exports = async (bot) => {
-    // inject slash command structure to old and new guilds
-    bot.tools.discord.updateSlashCommands(bot, false);
-    bot.tools.discord.startupGuildCheck(bot);
+    try {
+        // inject slash command structure to old and new guilds
+        bot.tools.discord.updateSlashCommands(bot, false);
+        bot.tools.discord.startupGuildCheck(bot);
+    } catch (err) {}
 
-    bot.tools.twitter.setup(bot);
+    try {
+        bot.tools.twitter.setup(bot);
+    } catch (err) {}
 
-    let customs = await bot.db.queryAsync('customcommand', {});
-    customs.map((cmd) => delete cmd._id);
+    if (process.env.DEBUG == true) {
+        let customs = await bot.db.queryAsync('customcommand', {});
+        customs.map((cmd) => delete cmd._id);
 
-    //Log all custom commands
-    console.log(`Custom commands: %o`, customs);
+        //Log all custom commands
+        console.log(`Custom commands: %o`, customs);
+    }
 
     console.log('[BOT LOGGED IN] » no critical problems could be detected...');
 };
