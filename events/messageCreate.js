@@ -58,7 +58,54 @@ module.exports = async (bot, message) => {
     }
 
     // ignore messages without prefix at the beginning
-    if (message.content.indexOf(prefix) !== 0) return;
+    if (message.content.indexOf(prefix) !== 0) {
+        if (message.guild.id !== bot.configs.general.guild_id) return;
+
+        let user = message.author.id;
+        let levelData = await client.db.queryAsync('levels', {
+            user: user
+        });
+        if (!levelData[0]) {
+            levelData = [
+                {
+                    user: user,
+                    level: 0,
+                    exp: 0,
+                    needed: 100,
+                    boost: 0,
+                    lastUpdate: 0
+                }
+            ];
+            await client.db.insertAsync('levels', levelData[0]);
+        }
+        levelData = levelData[0];
+        delete levelData._id;
+        delete levelData.user;
+
+        if (Date.now() - levelData.lastUpdate > 60000 /* 1min */) {
+            levelData.exp = levelData.exp + Math.floor(Math.random() * 11);
+            levelData.lastUpdate = Date.now();
+            bot.emit('debug', `Added Timeout ${message.author.username}`);
+
+            if (levelData.exp >= levelData.needed) {
+                levelData.level = levelData.level + 1;
+                levelData.exp = 0;
+                levelData.needed = levelData.needed + Math.floor(Math.random() * 100) + 100;
+
+                // TODO: add roles and send message on level up
+            }
+
+            await client.db.updateAsync(
+                'levels',
+                {
+                    user: user
+                },
+                levelData
+            );
+        }
+
+        return;
+    }
 
     // argument declaration
     const args = message.content.slice(prefix.length).trim().split(/ +/g);

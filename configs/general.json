@@ -1,5 +1,6 @@
 {
     "default_prefix": "-",
     "other_prefixes": [".", ">", "<", "$", "§", "#", "?", "_"],
-    "__comment_1": "TODO: decide if we want the bot using message commands too"
+    "__comment_1": "TODO: decide if we want the bot using message commands too",
+    "guild_id": "994657671926005814"
 }
