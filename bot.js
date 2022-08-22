@@ -24,7 +24,7 @@ if (!fs.existsSync(cachePath)) {
 
 // create the Discord Client
 const bot = new Client({
-    intents: 32767,
+    intents: 3276799,
     restRequestTimeout: 10000
 });
 
