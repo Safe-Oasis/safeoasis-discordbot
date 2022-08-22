@@ -8,7 +8,7 @@
 
 const similarity = moduleRequire('string-similarity');
 const Discord = moduleRequire('discord.js');
-const { EmbedBuilder } = Discord;
+const { EmbedBuilder, ActivityType } = Discord;
 const isDomain = moduleRequire('is-valid-domain');
 const { Routes } = moduleRequire('discord-api-types/v10');
 
@@ -21,22 +21,58 @@ module.exports.setStatus = async (bot, activities_list) => {
     if (index >= activities_list.length) index = activities_list.length - 1;
     var txt = activities_list[index][0];
     var amount = 0;
+    var type;
+    switch (activities_list[index][1]) {
+        case 'WATCHING':
+            type = ActivityType.Watching;
+            break;
+        case 'COMPETING':
+            type = ActivityType.Competing;
+            break;
+        case 'LISTENING':
+            type = ActivityType.Listening;
+            break;
+        case 'STREAMING':
+            type = ActivityType.Streaming;
+            break;
+        default:
+            type = ActivityType.Playing;
+            break;
+    }
     if (activities_list[index][1] != 'STREAMING') {
         bot.user.setActivity(txt, {
-            type: activities_list[index][1] || 'PLAYING'
+            type: type
         });
     } else {
         bot.user.setActivity(txt, {
-            type: 'STREAMING',
-            url: activities_list[index][2] || 'https://google.com'
+            type: type,
+            url: activities_list[index][2] || 'https://youtube.com/'
         });
     }
 };
 
 // set a new bot Status
 module.exports.setBotStatus = async (bot, status, type) => {
+    var type;
+    switch (type) {
+        case 'WATCHING':
+            type = ActivityType.Watching;
+            break;
+        case 'COMPETING':
+            type = ActivityType.Competing;
+            break;
+        case 'LISTENING':
+            type = ActivityType.Listening;
+            break;
+        case 'STREAMING':
+            type = ActivityType.Streaming;
+            break;
+        default:
+            type = ActivityType.Playing;
+            break;
+    }
     bot.user.setActivity(status || 'Leerer Status gesetzt', {
-        type: type || 'PLAYING'
+        type: type || ActivityType.Playing
     });
 };
 

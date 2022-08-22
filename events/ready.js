@@ -17,6 +17,10 @@ module.exports = async (bot) => {
         bot.tools.twitter.setup(bot);
     } catch (err) {}
 
+    // update random status each x random minutes
+    bot.tools.discord.updateStatus(bot);
+    bot.tools.javascript.randomInterval(120000, 300000, () => bot.tools.discord.updateStatus(bot));
+
     if (process.env.DEBUG == true) {
         let customs = await bot.db.queryAsync('customcommand', {});
         customs.map((cmd) => delete cmd._id);
