@@ -118,6 +118,8 @@ module.exports = async (bot, message) => {
 
     if (customC.length > 0) {
         let reply = customC[0].reply;
+        let deleteTrigger = customC[0].deleteTrigger;
+
         try {
             let jsonData = JSON.parse(reply);
             message.channel.send({ embeds: [await bot.tools.discord.generateEmbed(jsonData)] });
@@ -125,6 +127,10 @@ module.exports = async (bot, message) => {
         } catch (error) {
             console.log(error);
             message.channel.send(reply);
+        }
+
+        if (deleteTrigger == true) {
+            message.delete().catch(() => {});
         }
 
         return;
