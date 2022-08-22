@@ -183,10 +183,13 @@ module.exports.updateSlashCommands = async (bot, guildRefresh) => {
             console.log('Started refreshing application (/) commands.');
             var guildObjects = await bot.db.queryAsync('guilds', {});
             guildObjects.forEach(async (guildObject) => {
+                const guild = await bot.guilds.fetch(guildObject.id);
                 for (let slash_command of bot.slash_commands.array()) {
                     slashCommands.push(slash_command.data(bot, guildObject.language));
                 }
-                await bot.restClient.put(Routes.applicationGuildCommands(bot.user.id, guildObject.id), { body: slashCommands }).catch(console.error);
+                // await bot.restClient.put(Routes.applicationGuildCommands(bot.user.id, guildObject.id), { body: slashCommands }).catch(console.error);
+                guild.commands.set(slashCommands);
+                slashCommands = [];
             });
             console.log('Successfully reloaded application (/) commands.');
         } catch (error) {
@@ -205,7 +208,10 @@ module.exports.updateSlashCommands = async (bot, guildRefresh) => {
             for (let slash_command of bot.slash_commands.array()) {
                 slashCommands.push(slash_command.data(bot, guildObject[0].language));
             }
-            await bot.restClient.put(Routes.applicationGuildCommands(bot.user.id, guildRefresh.id), { body: slashCommands }).catch(console.error);
+            // await bot.restClient.put(Routes.applicationGuildCommands(bot.user.id, guildRefresh.id), { body: slashCommands }).catch(console.error);
+            const guild = await bot.guilds.fetch(guildObject[0].id);
+            guild.commands.set(slashCommands);
+            slashCommands = [];
             console.log('Successfully reloaded application (/) commands. GUILD: ' + guildRefresh.id);
         });
     }

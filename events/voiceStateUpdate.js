@@ -30,13 +30,13 @@ module.exports = async (bot, oldState, newState) => {
         let channel = await newState.member.guild.channels.create({
             name: newState.member.displayName,
             reason: 'new temp voice channels',
-            type: ChannelType.GuildVoice,
-            permissionOverwrites: [
-                {
-                    id: newState.member.id,
-                    allow: [PermissionFlagsBits.ManageChannels]
-                }
-            ]
+            type: ChannelType.GuildVoice
+            // permissionOverwrites: [
+            //     {
+            //         id: newState.member.id,
+            //         allow: [PermissionFlagsBits.ManageChannels]
+            //     }
+            // ]
         });
 
         channel.setParent(category);
