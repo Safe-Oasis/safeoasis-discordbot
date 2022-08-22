@@ -14,7 +14,7 @@ const category = process.env.TMP_VOICE_CHANNEL_CATEGORY;
 
 // event when the botsession gets invalid
 module.exports = async (bot, oldState, newState) => {
-    if (oldState?.guild?.id == null || oldState?.guild?.id != bot.configs.general.guild_id) return;
+    // if (oldState?.guild?.id == null || oldState?.guild?.id != bot.configs.general.guild_id) return;
     let selfMember = await oldState.guild.members.fetch(bot.user.id);
     if (!selfMember.permissions.has('MANAGE_CHANNELS')) return;
 
@@ -24,6 +24,8 @@ module.exports = async (bot, oldState, newState) => {
     if (newState.channel && newState.channel.parent) {
         if (newState.channel.id != lobby) return;
         if (newState.channel.parent.id != category) return;
+
+        bot.emit('debug', 'User joined Lobby');
 
         let channel = await newState.member.guild.channels.create({
             name: newState.member.displayName,
@@ -50,6 +52,7 @@ module.exports = async (bot, oldState, newState) => {
             if (channel.id != lobby) {
                 if (channel.members.size < 1) {
                     channel.delete('making room for new temp voice channels');
+                    bot.emit('debug', 'Temp Channel Deleted: ' + channel.name);
                     bot.db.deleteAsync('temp_voice', { channel: channel.id });
                 }
             }

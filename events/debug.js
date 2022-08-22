@@ -7,5 +7,5 @@
 'use strict'; // https://www.w3schools.com/js/js_strict.asp
 
 module.exports = async (bot, info) => {
-    if (process.env.DEBUG == true) console.debug('[DEBUG]' + info);
+    if (process.env.DEBUG == 'true') console.debug('[DEBUG]' + info);
 };
