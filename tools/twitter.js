@@ -39,14 +39,29 @@ const handleTweet = async (tweet) => {
 module.exports.setup = async (bot) => {
     let twitterToken = process.env.TWITTER_TOKEN;
 
-    twitterClient = new TwitterApi(twitterToken);
+    try {
+        twitterClient = new TwitterApi(twitterToken);
+    } catch (error) {}
 
-    const stream = await twitterClient.v1.sampleStream();
-    // Enable reconnect feature
-    stream.autoReconnect = true;
-    process.on('exit', () => stream.close());
-    process.on('SIGKILL', () => stream.close());
-    process.on('SIGTERM', () => stream.close());
+    if (!twitterClient) return;
+
+    // Add rules
+    const addedRules = await twitterClient.v2
+        .updateStreamRules({
+            add: [
+                {
+                    value: `from:${process.env.TWITTER_TRACK}`,
+                    tag: 'Give me everything'
+                }
+            ]
+        })
+        .catch(() => {});
+
+    if (!addedRules) return;
+
+    const stream = await twitterClient.v2.getStream('tweets/search/stream?tweet.fields=created_at&expansions=author_id&user.fields=profile_image_url', addedRules).catch(() => {});
+
+    if (!stream) return;
 
     // Awaits for a tweet
     stream.on(ETwitterStreamEvent.ConnectionError, (err) => console.log('Connection error!', err));
@@ -62,4 +77,11 @@ module.exports.setup = async (bot) => {
         ETwitterStreamEvent.Data,
         handleTweet
     );
+
+    process.on('exit', () => stream.close());
+    process.on('SIGKILL', () => stream.close());
+    process.on('SIGTERM', () => stream.close());
+
+    // Start stream!
+    await stream.connect({ autoReconnect: true, autoReconnectRetries: Infinity });
 };
