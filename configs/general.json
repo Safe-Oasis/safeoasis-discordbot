@@ -1,0 +1,5 @@
+{
+    "default_prefix": "/",
+    "other_prefixes": ["-", ".", ">", "<", "$", "§", "#", "?", "_"],
+    "__comment_1": "TODO: decide if we want the bot using message commands too"
+}

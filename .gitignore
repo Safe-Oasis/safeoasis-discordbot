@@ -10,3 +10,4 @@ out/
 
 # project
 .env
+cache.json
