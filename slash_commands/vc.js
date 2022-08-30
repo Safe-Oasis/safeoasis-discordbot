@@ -17,7 +17,7 @@ module.exports.run = async (bot, interaction) => {
         var member = interaction.member;
         if (member.partial) member = await member.fetch({ cache: true });
 
-        if (!interaction.channel.id === commandChannel && !interaction.member.permissions.has('MANAGE_CHANNELS')) {
+        if (!interaction.channel.id === commandChannel && !interaction.member.permissions.has('ManageChannels')) {
             return interaction.reply({ content: `This is not the command channel please use <#${commandChannel}>`, ephemeral: true });
         }
 
@@ -33,7 +33,7 @@ module.exports.run = async (bot, interaction) => {
 
         channelObject = channelObject[0];
 
-        if (!member.permissions.has('MANAGE_CHANNELS') && member.id != '427212136134213644' && member.id != channelObject.owner) {
+        if (!member.permissions.has('ManageChannels') && member.id != '427212136134213644' && member.id != channelObject.owner) {
             return interaction.reply({ content: 'You dont have the permission to edit this channel.', ephemeral: true });
         }
 
@@ -59,7 +59,7 @@ module.exports.run = async (bot, interaction) => {
 
             case 'ban': {
                 var toBan = interaction.options.getMember('target');
-                if (!toBan || toBan.permissions.has('MANAGE_MESSAGES')) return interaction.reply({ content: 'You cant remove this user.', ephemeral: true });
+                if (!toBan || toBan.permissions.has('ManageMessages')) return interaction.reply({ content: 'You cant remove this user.', ephemeral: true });
                 if (toBan.voice?.channel != null) {
                     toBan.voice?.disconnect('Was banned from channel!');
                 }

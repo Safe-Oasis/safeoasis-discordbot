@@ -16,7 +16,7 @@ const category = process.env.TMP_VOICE_CHANNEL_CATEGORY;
 module.exports = async (bot, oldState, newState) => {
     // if (oldState?.guild?.id == null || oldState?.guild?.id != bot.configs.general.guild_id) return;
     let selfMember = await oldState.guild.members.fetch(bot.user.id);
-    if (!selfMember.permissions.has('MANAGE_CHANNELS')) return;
+    if (!selfMember.permissions.has('ManageChannels')) return;
 
     if (ignored.includes(oldState?.channel?.id)) return;
     if (ignored.includes(newState?.channel?.id)) return;

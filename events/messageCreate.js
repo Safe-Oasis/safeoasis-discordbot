@@ -173,7 +173,7 @@ ${prefix}${similar} ${args.join(' ')}
     var ts = Date.now();
     if (commandLastPost[message.author.id] != null) {
         if (ts - commandLastPost[message.author.id] < 3000) {
-            if (!message.member.permissions.has('MANAGE_MESSAGES')) return message.reply(':x: Please do not spam commands! :x:');
+            if (!message.member.permissions.has('ManageMessages')) return message.reply(':x: Please do not spam commands! :x:');
         }
     }
     commandLastPost[message.author.id] = ts;

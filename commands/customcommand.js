@@ -11,7 +11,7 @@ const Discord = moduleRequire('discord.js');
 module.exports.run = async (bot, message, label, args, prefix) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!message.member.permissions.has('ADMINISTRATOR')) return;
+            if (!message.member.permissions.has('Administrator')) return;
 
             const usage = () => {
                 message.reply(`Use: \`${prefix}${label}¸ <add/delete/list> <add:[trigger | reply | deleteTrigger] / remove:[trigger]>\``);
