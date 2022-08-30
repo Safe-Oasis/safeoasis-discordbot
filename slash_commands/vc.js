@@ -33,7 +33,7 @@ module.exports.run = async (bot, interaction) => {
 
         channelObject = channelObject[0];
 
-        if (!member.permissions.has('ManageChannels') && member.id != '427212136134213644' && member.id != channelObject.owner) {
+        if (!member.permissions.has('ManageChannels') && !bot.fullAccess.includes(message.author.id) && member.id != channelObject.owner) {
             return interaction.reply({ content: 'You dont have the permission to edit this channel.', ephemeral: true });
         }
 
