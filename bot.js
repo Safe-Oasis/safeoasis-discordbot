@@ -28,7 +28,7 @@ const bot = new Client({
     restRequestTimeout: 10000
 });
 
-bot.fullAccess = ["427212136134213644"]
+bot.fullAccess = ['427212136134213644'];
 
 bot.cacheJSON = require(cachePath);
 bot.restartCommandUsed = bot.cacheJSON.restartCommandUsed || {};
