@@ -99,7 +99,7 @@ module.exports.run = async (bot, interaction) => {
                 return;
         }
     } catch (error) {
-        bot.error('Error in Slash Command VC', error);
+        console.error('Error in Slash Command VC', error);
     }
 };
 

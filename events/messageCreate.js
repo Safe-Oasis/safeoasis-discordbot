@@ -62,7 +62,7 @@ module.exports = async (bot, message) => {
         if (message.guild.id !== bot.configs.general.guild_id) return;
 
         let user = message.author.id;
-        let levelData = await client.db.queryAsync('levels', {
+        let levelData = await bot.db.queryAsync('levels', {
             user: user
         });
         if (!levelData[0]) {
@@ -76,7 +76,7 @@ module.exports = async (bot, message) => {
                     lastUpdate: 0
                 }
             ];
-            await client.db.insertAsync('levels', levelData[0]);
+            await bot.db.insertAsync('levels', levelData[0]);
         }
         levelData = levelData[0];
         delete levelData._id;
@@ -95,7 +95,7 @@ module.exports = async (bot, message) => {
                 // TODO: add roles and send message on level up
             }
 
-            await client.db.updateAsync(
+            await bot.db.updateAsync(
                 'levels',
                 {
                     user: user
