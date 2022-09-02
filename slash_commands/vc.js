@@ -82,14 +82,14 @@ module.exports.run = async (bot, interaction) => {
 
             case 'lock': {
                 await currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
-                    CONNECT: false
+                    Connect: false
                 });
                 return interaction.reply({ content: 'The channel was locked.', ephemeral: true });
             }
 
             case 'unlock': {
                 await currentChannel.permissionOverwrites.edit(currentChannel.guild.id, {
-                    CONNECT: true
+                    Connect: true
                 });
                 return interaction.reply({ content: 'The channel was unlocked.', ephemeral: true });
             }
